@@ -1,9 +1,11 @@
+using System;
+
 namespace cervejaria_api.Modules.Users.contracts;
 
 public interface IUsuario
 {
     int Id { get; set; }
-    String NomeUsuario { get; set; }
+    string? NomeUsuario { get; set; }
     String Senha { get; set; }
     byte NivelAcesso { get; set;}
     DateTime CreateAt { get; set; }

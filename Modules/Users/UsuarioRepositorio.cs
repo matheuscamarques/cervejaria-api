@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
 using cervejaria_api.Modules.Users.contracts;
@@ -8,16 +10,23 @@ public class UsuarioRepositorio : IUsuarioRepositorio
 {
     public List<IUsuario> GetAll()
     {
-        List<IUsuario> users = new List<IUsuario>();
-        Usuario karlaUser = new Usuario();
-        karlaUser.Id = 0;
-        karlaUser.NivelAcesso = 3;
-        karlaUser.Senha = "123456";
-        karlaUser.NomeUsuario = "karlinhaguerreiro";
-        karlaUser.CreateAt = DateTime.Now;
-        karlaUser.UptadedAt = DateTime.Now;
-        users.Add(karlaUser);
-        return users;
+        SqlConnection conn = AzureConn.GetConnection();
+        SqlCommand cmd = new SqlCommand("SELECT * FROM Usuario", conn);
+        conn.Open();
+        SqlDataReader reader = cmd.ExecuteReader();
+        List<IUsuario> usuarios = new List<IUsuario>();
+        while (reader.Read())
+        {
+            IUsuario usuario = new Usuario();
+            usuario.Id = Convert.ToInt32(reader["id"]);
+            usuario.NomeUsuario = reader["nome_usuario"].ToString();
+            usuario.CreateAt = Convert.ToDateTime(reader["created_at"]);
+            usuario.UptadedAt = Convert.ToDateTime(reader["updated_at"]);
+            usuarios.Add(usuario);
+        }
+        
+        conn.Close();
+        return usuarios;
     }
     
     public IUsuario Create(IUsuario user)

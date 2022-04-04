@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using cervejaria_api.Modules.Users.contracts;
 
 namespace cervejaria_api.Modules.Users;
