@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using cervejaria_api.Modules.Users.contracts;
+using System.Linq;
 
 namespace cervejaria_api.Modules.Users;
 
@@ -7,9 +8,17 @@ public class UsuarioServico : IUsuarioServico
 {   
     // Implementação do Serviço
     private static IUsuarioRepositorio? _repository;
-    public List<IUsuario> GetAll()
+
+    public int[] GetAll()
     {
-        return _repository == null ? new List<IUsuario>() : _repository.GetAll();
+        if (_repository == null)
+            _repository = new UsuarioRepositorio();
+        
+        return _repository
+                .GetAll()
+                .Select(x => x.Id)
+                .ToArray();
+        
     }
 
     public IUsuario Create(IUsuario usuario)

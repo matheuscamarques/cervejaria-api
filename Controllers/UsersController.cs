@@ -1,6 +1,5 @@
-using System.Collections.Generic;
+using cervejaria_api.Infra.BodyInput;
 using cervejaria_api.Modules.Users;
-using cervejaria_api.Modules.Users.contracts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace cervejaria_api.Controllers;
@@ -9,7 +8,7 @@ namespace cervejaria_api.Controllers;
 public class UsersController : ControllerBase
 {
     [HttpGet]
-    public List<IUsuario> Get()
+    public int[] Get()
     {
         return UsuarioServico.GetInstance().GetAll();
     }
@@ -18,19 +17,20 @@ public class UsersController : ControllerBase
      * Create a new administrator user
      */
     [HttpPost]
-    public IActionResult Create([FromBody] Usuario usuario)
+    public IActionResult Create([FromBody] UserCreateInput inputUsuario)
     {
-        if (usuario == null)
-        {
-            return BadRequest();
-        }
+        var usuario = new Usuario();
+        usuario.NomeUsuario = inputUsuario.NomeUsuario;
+        usuario.Senha = inputUsuario.senha;
+        usuario.NivelAcesso = (byte)inputUsuario.NivelDeAcesso;
+        
         int id = UsuarioServico.GetInstance().Create(usuario).Id;
         if(id == 0)
         {
             return BadRequest();
         }
 
-        return Ok(new { id = id });
+        return Ok(new { id });
     }
     
 }

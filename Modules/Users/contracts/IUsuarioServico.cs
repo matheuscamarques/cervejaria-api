@@ -4,6 +4,6 @@ namespace cervejaria_api.Modules.Users.contracts;
 
 public interface IUsuarioServico
 {
-    List<IUsuario> GetAll();
+    int[] GetAll();
     IUsuario Create(IUsuario usuario);
 }
